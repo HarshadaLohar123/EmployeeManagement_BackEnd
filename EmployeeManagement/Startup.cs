@@ -40,7 +40,11 @@ namespace EmployeeManagement
             services.AddTransient<IEmployeeBL,EmployeeBL>();
             services.AddTransient<IEmployeeRL,EmployeeRL>();
 
-          
+            services.AddTransient<IEmployeeRoleBL, EmployeeRoleBL>();
+            services.AddTransient<IEmployeeRoleRL, EmployeeRoleRL>();
+
+
+
             services.AddSwaggerGen(setup =>
             {
                 // Include 'SecurityScheme' to use JWT Authentication
