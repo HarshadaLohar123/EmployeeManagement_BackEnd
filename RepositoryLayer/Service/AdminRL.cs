@@ -25,8 +25,6 @@ namespace RepositoryLayer.Service
         {
             this.Connection = new SqlConnection(this.Configuration["ConnectionStrings:EmployeeManagement"]);
 
-            try
-            {
                 SqlCommand command = new SqlCommand("LoginAdmin", this.Connection)
                 {
                     CommandType = CommandType.StoredProcedure
@@ -56,18 +54,10 @@ namespace RepositoryLayer.Service
                 {
                     throw new Exception("Email Or Password Is Wrong");
                 }
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
         }
 
         public string GetJWTToken(AdminLoginModel admin)
         {
-
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenKey = Encoding.ASCII.GetBytes("THIS_IS_MY_KEY_TO_GENERATE_TOKEN");
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -88,7 +78,5 @@ namespace RepositoryLayer.Service
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
-
-
     }
 }

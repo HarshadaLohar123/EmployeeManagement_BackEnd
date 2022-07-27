@@ -17,26 +17,11 @@ namespace BusinessLayer.Service
         }
         public string Login(EmployeeLoginModel employeeLoginModel)
         {
-            try
-            {
                 return this.EmployeeRL.Login(employeeLoginModel);
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
         }
         public EmployeeModel GetEmployeeDetail(int EmployeeId)
-        {
-            try
-            {
+        { 
                 return this.EmployeeRL.GetEmployeeDetail(EmployeeId);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
         }
     }
 }

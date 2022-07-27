@@ -5,7 +5,7 @@ using System;
 
 namespace EmployeeManagement.Controllers
 {
-    [ApiController]  
+    [ApiController]
     [Route("[controller]")]
     public class AdminController : Controller
     {
@@ -18,18 +18,13 @@ namespace EmployeeManagement.Controllers
         [HttpPost("AdminLogin")]
         public IActionResult AdminLogin(AdminResponse adminResponse)
         {
-            try
-            {
-                var result = this.adminBL.Adminlogin(adminResponse);
-                if (result != null)
-                    return this.Ok(new { success = true, message = " Admin Login Successful", data = result });
-                else
-                    return this.BadRequest(new { success = false, message = "Login Failed", data = result });
-            }
-            catch (Exception)
-            {
-                return this.BadRequest(new { success = false, message = "Login Failed" });
-            }
+
+            var result = this.adminBL.Adminlogin(adminResponse);
+            if (result != null)
+                return this.Ok(new { success = true, message = " Admin Login Successful", data = result });
+            else
+                return this.BadRequest(new { success = false, message = "Login Failed", data = result });
+
         }
 
     }

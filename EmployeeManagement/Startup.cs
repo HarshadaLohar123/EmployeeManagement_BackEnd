@@ -1,5 +1,6 @@
 using BusinessLayer.Interface;
 using BusinessLayer.Service;
+using EmployeeManagement.GlobalException;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,6 +35,7 @@ namespace EmployeeManagement
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
             services.AddTransient<IAdminBL, AdminBL>();
             services.AddTransient<IAdminRL, AdminRL>();
 
@@ -43,7 +45,17 @@ namespace EmployeeManagement
             services.AddTransient<IEmployeeRoleBL, EmployeeRoleBL>();
             services.AddTransient<IEmployeeRoleRL, EmployeeRoleRL>();
 
-
+            services.AddControllers().AddNewtonsoftJson(options =>
+            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            services.AddCors(options =>
+            {
+                options.AddPolicy(
+                name: "AllowOrigin",
+              builder =>
+              {
+                  builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+              });
+            });
 
             services.AddSwaggerGen(setup =>
             {
@@ -104,10 +116,11 @@ namespace EmployeeManagement
             });
 
             app.UseAuthentication();
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+
+            //global exception
+            app.ExceptionHandler(env);
+
+            app.UseCors("AllowOrigin");
 
             app.UseHttpsRedirection();
 
