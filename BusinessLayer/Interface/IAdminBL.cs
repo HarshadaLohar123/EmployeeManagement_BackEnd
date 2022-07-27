@@ -8,6 +8,5 @@ namespace BusinessLayer.Interface
     public interface IAdminBL
     {
         public AdminLoginModel Adminlogin(AdminResponse adminResponse);
-
     }
 }

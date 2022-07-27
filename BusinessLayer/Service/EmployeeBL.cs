@@ -18,49 +18,21 @@ namespace BusinessLayer.Service
 
         public EmployeeModel AddEmployee(EmployeeModel employee)
         {
-            try
-            {
-                return this.EmployeeRL.AddEmployee(employee);
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
+            return this.EmployeeRL.AddEmployee(employee);
         }
 
         public bool DeleteEmployee(int EmployeeId)
         {
-            try
-            {
-                return this.EmployeeRL.DeleteEmployee(EmployeeId);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            return this.EmployeeRL.DeleteEmployee(EmployeeId);
         }
         public List<EmployeeModel> GetAllEmployee()
         {
-            try
-            {
-                return this.EmployeeRL.GetAllEmployee();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            return this.EmployeeRL.GetAllEmployee();
         }
         public UpdateEmployeeModel UpdateEmployee(UpdateEmployeeModel updateEmployee)
         {
-            try
-            {
-                return this.EmployeeRL.UpdateEmployee(updateEmployee);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+
+            return this.EmployeeRL.UpdateEmployee(updateEmployee);
         }
 
     }

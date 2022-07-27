@@ -25,8 +25,7 @@ namespace RepositoryLayer.Service
         public EmployeeModel AddEmployee(EmployeeModel employee)
         {
             this.Connection = new SqlConnection(this.configuration["ConnectionStrings:EmployeeManagement"]);
-            try
-            {
+         
                 SqlCommand command = new SqlCommand("AddEmployee", Connection);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@FirstName", employee.FirstName);
@@ -51,52 +50,35 @@ namespace RepositoryLayer.Service
                 {
                     return null;
                 }
-
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
         }
 
         public bool DeleteEmployee(int EmployeeId)
         {
             Connection = new SqlConnection(this.configuration["ConnectionStrings:EmployeeManagement"]);
-            try
-            {
 
-                using (Connection)
+            using (Connection)
+            {
+                SqlCommand cmd = new SqlCommand("DeleteEmployee", Connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@EmployeeId", EmployeeId);
+                Connection.Open();
+                int result = cmd.ExecuteNonQuery();
+                Connection.Close();
+                if (result != 0)
                 {
-                    SqlCommand cmd = new SqlCommand("DeleteEmployee", Connection);
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    cmd.Parameters.AddWithValue("@EmployeeId", EmployeeId);
-                    Connection.Open();
-                    int result = cmd.ExecuteNonQuery();
-                    Connection.Close();
-                    if (result != 0)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    return true;
                 }
-            }
-            catch (Exception)
-            {
-                throw;
+                else
+                {
+                    return false;
+                }
             }
         }
 
         public UpdateEmployeeModel UpdateEmployee(UpdateEmployeeModel updateEmployee)
         {
             Connection = new SqlConnection(this.configuration["ConnectionStrings:EmployeeManagement"]);
-            try
-            {
-
                 using (Connection)
                 {
                     SqlCommand cmd = new SqlCommand("UpdateEmployee", Connection);
@@ -125,17 +107,10 @@ namespace RepositoryLayer.Service
                         return null;
                     }
                 }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
         }
 
         public List<EmployeeModel> GetAllEmployee()
         {
-            try
-            {
                 List<EmployeeModel> employeeModels = new List<EmployeeModel>();
                 this.Connection = new SqlConnection(this.configuration["ConnectionStrings:EmployeeManagement"]);
                 SqlCommand cmd = new SqlCommand("GetAllEmployee", this.Connection)
@@ -145,42 +120,33 @@ namespace RepositoryLayer.Service
 
                 this.Connection.Open();
                 SqlDataReader reader = cmd.ExecuteReader();
-                if (reader.HasRows)
+            if (reader.HasRows)
+            {
+                while (reader.Read())
                 {
-                    while (reader.Read())
+                    employeeModels.Add(new EmployeeModel
                     {
-                        employeeModels.Add(new EmployeeModel
-                        {
-                            EmployeeId = Convert.ToInt32(reader["EmployeeId"]),
-                            FirstName = reader["FirstName"].ToString(),
-                            LastName = reader["LastName"].ToString(),
-                            Email = reader["Email"].ToString(),
-                            Password = reader["Password"].ToString(),
-                            EmpAddress = reader["EmpAddress"].ToString(),
-                            Gender = reader["Gender"].ToString(),
-                            DateOfBirth = reader["DateOfBirth"].ToString(),
-                            Position = reader["Position"].ToString(),
-                            Salary = Convert.ToDecimal(reader["Salary"]),
-                            PhoneNumber = reader["PhoneNumber"].ToString(),
+                        EmployeeId = Convert.ToInt32(reader["EmployeeId"]),
+                        FirstName = reader["FirstName"].ToString(),
+                        LastName = reader["LastName"].ToString(),
+                        Email = reader["Email"].ToString(),
+                        Password = reader["Password"].ToString(),
+                        EmpAddress = reader["EmpAddress"].ToString(),
+                        Gender = reader["Gender"].ToString(),
+                        DateOfBirth = reader["DateOfBirth"].ToString(),
+                        Position = reader["Position"].ToString(),
+                        Salary = Convert.ToDecimal(reader["Salary"]),
+                        PhoneNumber = reader["PhoneNumber"].ToString(),
 
-                        });
-                    }
+                    });
+                }
 
-                    this.Connection.Close();
-                    return employeeModels;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            finally
-            {
                 this.Connection.Close();
+                return employeeModels;
+            }
+            else
+            {
+                return null;
             }
         }
 

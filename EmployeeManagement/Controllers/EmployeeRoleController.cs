@@ -19,23 +19,15 @@ namespace EmployeeManagement.Controllers
         [HttpPost("EmployeeLogin")]
         public IActionResult EmployeeLogin(EmployeeLoginModel employeeLogin)
         {
-            try
-            {
-                var result = this.employeeBL.Login(employeeLogin);
-                if (result != null)
-                {
-                    return this.Ok(new { success = true, message = "Employee Login Successful", Token = result });
-                }
-                else
-                {
-                    return this.BadRequest(new { success = false, message = "Sorry!!! Login Failed", Token = result });
-                }
 
+            var result = this.employeeBL.Login(employeeLogin);
+            if (result != null)
+            {
+                return this.Ok(new { success = true, message = "Employee Login Successful", Token = result });
             }
-            catch (Exception ex)
+            else
             {
-                return this.BadRequest(new { success = false, message = "Sorry!!! Login Failed,Please enter valid Email and password" });
-
+                return this.BadRequest(new { success = false, message = "Sorry!!! Login Failed", Token = result });
             }
         }
 
@@ -44,22 +36,14 @@ namespace EmployeeManagement.Controllers
         public IActionResult GetEmployeeDetail()
         {
             int EmployeeId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "EmployeeId").Value);
-            try
+            var employee = this.employeeBL.GetEmployeeDetail(EmployeeId);
+            if (employee != null)
             {
-
-                var employee = this.employeeBL.GetEmployeeDetail(EmployeeId);
-                if (employee != null)
-                {
-                    return this.Ok(new { Success = true, message = "Employee Detail Fetched Sucessfully", Response = employee });
-                }
-                else
-                {
-                    return this.BadRequest(new { Success = false, message = "Sorry! Please Enter Valid Employee Id" });
-                }
+                return this.Ok(new { Success = true, message = "Employee Detail Fetched Sucessfully", Response = employee });
             }
-            catch (Exception ex)
+            else
             {
-                return this.BadRequest(new { Success = false, message = ex.Message });
+                return this.BadRequest(new { Success = false, message = "Sorry! Please Enter Valid Employee Id" });
             }
         }
     }

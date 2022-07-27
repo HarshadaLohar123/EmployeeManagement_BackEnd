@@ -16,14 +16,7 @@ namespace BusinessLayer.Service
         IAdminRL adminRL;
         public AdminLoginModel Adminlogin(AdminResponse adminResponse)
         {
-            try
-            {
-                return this.adminRL.Adminlogin(adminResponse);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            return this.adminRL.Adminlogin(adminResponse);
         }
     }
 }
